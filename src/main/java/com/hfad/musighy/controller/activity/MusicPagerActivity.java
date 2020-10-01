@@ -23,7 +23,7 @@ import com.hfad.musighy.controller.fragment.ArtistFragment;
 import com.hfad.musighy.R;
 import com.hfad.musighy.controller.fragment.SongFragment;
 import com.hfad.musighy.model.Music;
-import com.hfad.musighy.model.MusicInfo;
+import com.hfad.musighy.model.MusicsInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +44,8 @@ public class MusicPagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_pager);
-        handelPermission();
         findAllViews();
+        handelPermission();
     }
 
     private void handelPermission() {
@@ -55,7 +55,7 @@ public class MusicPagerActivity extends AppCompatActivity {
                     , PERMISSION_REQUEST_CODE);
         } else {
             Toast.makeText(this, "WELCOME", Toast.LENGTH_LONG).show();
-            mMusicArrayList = MusicInfo.getMusics(this);
+            mMusicArrayList = new MusicsInfo().getMusics(this);
             updateUI();
         }
     }
@@ -114,7 +114,7 @@ public class MusicPagerActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mMusicArrayList = MusicInfo.getMusics(this);
+                mMusicArrayList = new MusicsInfo().getMusics(this);
                 updateUI();
             } else {
                 finish();

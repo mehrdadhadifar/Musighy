@@ -1,24 +1,19 @@
 package com.hfad.musighy.model;
 
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaExtractor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class MusicInfo {
+public class MusicsInfo {
 
     public static final String TAG = "MI";
 
-    public static ArrayList<Music> getMusics(Context context) {
+    public ArrayList<Music> getMusics(Context context) {
         ArrayList<Music> musicList = new ArrayList<>();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String info[] = {
