@@ -1,4 +1,4 @@
-package com.hfad.musighy;
+package com.hfad.musighy.controller.fragment;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.hfad.musighy.R;
 
 
 public class AlbumFragment extends Fragment {

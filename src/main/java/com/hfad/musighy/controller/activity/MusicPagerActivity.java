@@ -1,26 +1,39 @@
-package com.hfad.musighy;
+package com.hfad.musighy.controller.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.hfad.musighy.controller.fragment.AlbumFragment;
+import com.hfad.musighy.controller.fragment.ArtistFragment;
+import com.hfad.musighy.R;
+import com.hfad.musighy.controller.fragment.SongFragment;
+import com.hfad.musighy.model.Music;
+import com.hfad.musighy.model.MusicInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicPagerActivity extends AppCompatActivity {
+    public static final int PERMISSION_REQUEST_CODE = 1;
     private TabLayout mMusicTabLayout;
     private ViewPager2 mMusicViewPager;
     private MusicViewPagerAdapter mAdapter;
+    private ArrayList<Music> mMusicArrayList;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MusicPagerActivity.class);
@@ -31,8 +44,20 @@ public class MusicPagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_pager);
+        handelPermission();
         findAllViews();
-        updateUI();
+    }
+
+    private void handelPermission() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}
+                    , PERMISSION_REQUEST_CODE);
+        } else {
+            Toast.makeText(this, "WELCOME", Toast.LENGTH_LONG).show();
+            mMusicArrayList = MusicInfo.getMusics(this);
+            updateUI();
+        }
     }
 
     private void updateUI() {
@@ -62,7 +87,6 @@ public class MusicPagerActivity extends AppCompatActivity {
 
     public class MusicViewPagerAdapter extends FragmentStateAdapter {
         private List<Fragment> mFragmentList;
-        private List<String> mTitles;
 
         public MusicViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
@@ -82,6 +106,19 @@ public class MusicPagerActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return mFragmentList.size();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mMusicArrayList = MusicInfo.getMusics(this);
+                updateUI();
+            } else {
+                finish();
+            }
         }
     }
 }
