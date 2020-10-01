@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.hfad.musighy.R;
 import com.hfad.musighy.adapter.MusicAdapter;
 import com.hfad.musighy.model.Music;
-import com.hfad.musighy.model.MusicsInfo;
+import com.hfad.musighy.model.MusicRepository;
 
 import java.util.List;
 
@@ -50,9 +50,9 @@ public class SongFragment extends Fragment {
 
     private void updateUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<Music> musics = new MusicsInfo().getMusics(getActivity());
+        List<Music> musics = new MusicRepository(getActivity()).getMusicList();
         if (mMusicAdapter == null) {
-            mMusicAdapter = new MusicAdapter(getActivity(),musics);
+            mMusicAdapter = new MusicAdapter(getActivity(), musics);
             mRecyclerView.setAdapter(mMusicAdapter);
         } else {
             mMusicAdapter.notifyDataSetChanged();
@@ -60,6 +60,6 @@ public class SongFragment extends Fragment {
     }
 
     private void findAllViews(View view) {
-        mRecyclerView=view.findViewById(R.id.music_recycler_view);
+        mRecyclerView = view.findViewById(R.id.music_recycler_view);
     }
 }

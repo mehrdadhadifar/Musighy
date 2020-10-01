@@ -23,7 +23,7 @@ import com.hfad.musighy.controller.fragment.ArtistFragment;
 import com.hfad.musighy.R;
 import com.hfad.musighy.controller.fragment.SongFragment;
 import com.hfad.musighy.model.Music;
-import com.hfad.musighy.model.MusicsInfo;
+import com.hfad.musighy.model.MusicRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class MusicPagerActivity extends AppCompatActivity {
                     , PERMISSION_REQUEST_CODE);
         } else {
             Toast.makeText(this, "WELCOME", Toast.LENGTH_LONG).show();
-            mMusicArrayList = new MusicsInfo().getMusics(this);
+            mMusicArrayList = new MusicRepository(this).getMusicList();
             updateUI();
         }
     }
@@ -114,7 +114,7 @@ public class MusicPagerActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mMusicArrayList = new MusicsInfo().getMusics(this);
+                mMusicArrayList = new MusicRepository(this).getMusicList();
                 updateUI();
             } else {
                 finish();

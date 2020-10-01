@@ -1,6 +1,7 @@
 package com.hfad.musighy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,7 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hfad.musighy.R;
+import com.hfad.musighy.controller.activity.PlayMusicActivity;
 import com.hfad.musighy.model.Music;
+import com.hfad.musighy.model.MusicRepository;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -53,31 +56,27 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
         private TextView mTextViewMusicFileName;
         private ImageView mImageViewAlbumArt;
 
-        public MusicHolder(@NonNull View itemView) {
+        public MusicHolder(@NonNull final View itemView) {
             super(itemView);
             mTextViewMusicFileName = itemView.findViewById(R.id.text_view_music_file_name);
             mImageViewAlbumArt = itemView.findViewById(R.id.image_view_music_img);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = PlayMusicActivity.newIntent(mContext, getAdapterPosition());
+                    mContext.startActivity(intent);
+                }
+            });
         }
+
 
         public void bindMusic(Music music) {
             mTextViewMusicFileName.setText(music.getTitle());
-            byte[] image = getAlbumArt(music.getPath());
-            Drawable albumArt;
-            if (image != null) {
-                ByteArrayInputStream is = new ByteArrayInputStream(image);
-                albumArt = Drawable.createFromStream(is, "Image");
-            } else
-                albumArt = mContext.getResources().getDrawable(R.drawable.ic_no_album_art);
-            mImageViewAlbumArt.setImageDrawable(albumArt);
+            mImageViewAlbumArt.setImageDrawable(new MusicRepository(mContext).getAlbumArt(music));
 
         }
     }
 
-    private byte[] getAlbumArt(String uri) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(uri);
-        byte[] art = retriever.getEmbeddedPicture();
-        retriever.release();
-        return art;
-    }
+
 }

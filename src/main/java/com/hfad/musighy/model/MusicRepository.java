@@ -3,17 +3,42 @@ package com.hfad.musighy.model;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import java.util.ArrayList;
+import com.hfad.musighy.R;
 
-public class MusicsInfo {
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MusicRepository {
 
     public static final String TAG = "MI";
+    private Context mContext;
+    private ArrayList<Music> mMusicList;
 
-    public ArrayList<Music> getMusics(Context context) {
+/*    public static MusicRepository getInstance(Context context) {
+        mContext = context.getApplicationContext();
+        if (sMusicRepository == null)
+            sMusicRepository = new MusicRepository();
+        return sMusicRepository;
+    }*/
+
+    public ArrayList<Music> getMusicList() {
+        return mMusicList;
+    }
+
+    public MusicRepository(Context context) {
+        mContext = context.getApplicationContext();
+        if (mMusicList == null)
+            mMusicList = getMusics(mContext);
+    }
+
+    private ArrayList<Music> getMusics(Context context) {
         ArrayList<Music> musicList = new ArrayList<>();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String info[] = {
@@ -49,4 +74,19 @@ public class MusicsInfo {
         }
         return musicList;
     }
+
+    public Drawable getAlbumArt(Music music) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(music.getPath());
+        byte[] art = retriever.getEmbeddedPicture();
+        retriever.release();
+        Drawable albumArt;
+        if (art != null) {
+            ByteArrayInputStream is = new ByteArrayInputStream(art);
+            albumArt = Drawable.createFromStream(is, "Image");
+        } else
+            albumArt = mContext.getResources().getDrawable(R.drawable.ic_no_album_art);
+        return albumArt;
+    }
 }
+
