@@ -15,14 +15,14 @@ public class Music {
     public Music() {
     }
 
-    public Music(String path, String title, String artist, String album, String duration,Uri albumArtUri,Uri musicUri) {
+    public Music(String path, String title, String artist, String album, String duration, Uri albumArtUri, Uri musicUri) {
         this.path = path;
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
         this.albumArtUri = albumArtUri;
-        this.musicUri=musicUri;
+        this.musicUri = musicUri;
     }
 
     public String getPath() {

@@ -37,7 +37,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
     @Override
     public void onBindViewHolder(@NonNull MusicHolder holder, int position) {
         Music music = mMusicList.get(position);
-        holder.bindMusic(holder, music);
+        holder.bindMusic(music);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
         }
 
 
-        public void bindMusic(MusicHolder holder, Music music) {
+        public void bindMusic(Music music) {
             mTextViewMusicFileName.setText(music.getTitle());
             Glide.with(mContext).load(music.getAlbumArtUri()).placeholder(R.drawable.ic_no_album_art).into(mImageViewAlbumArt);
 

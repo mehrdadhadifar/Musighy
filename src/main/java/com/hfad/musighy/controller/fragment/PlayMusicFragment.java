@@ -20,10 +20,12 @@ import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PlayMusicFragment extends Fragment {
     public static final String ARGS_MUSIC_POSITION = "ARGS_MUSIC_POSITION";
+    private static final String ARGS_MUSIC_LIST = "ARGS_MUSIC_LIST";
     public static final String TAG = "Play Music Fragment";
     private MusicRepository mRepository;
     private TextView mTextViewName;

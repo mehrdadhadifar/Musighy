@@ -63,7 +63,7 @@ public class MusicPagerActivity extends AppCompatActivity {
     private void updateUI() {
         mRepository.getMusicList();
         mAdapter = new MusicViewPagerAdapter(this);
-        mAdapter.addFragments(SongFragment.newInstance());
+        mAdapter.addFragments(SongFragment.newInstance(null,null));
         mAdapter.addFragments(AlbumFragment.newInstance());
         mAdapter.addFragments(ArtistFragment.newInstance());
         mMusicViewPager.setAdapter(mAdapter);

@@ -14,6 +14,7 @@ import com.hfad.musighy.R;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MusicRepository {
     private static MusicRepository sMusicRepository;
@@ -129,6 +130,26 @@ public class MusicRepository {
 
     public void setRepeatOne(boolean repeatOne) {
         this.repeatOne = repeatOne;
+    }
+
+    public List<Music> getMusicListByAlbum(String album) {
+        List<Music> result = new ArrayList<>();
+        for (Music music : mMusicList
+        ) {
+            if (music.getAlbum().equals(album))
+                result.add(music);
+        }
+        return result;
+    }
+
+    public List<Music> getMusicListByArtists(String artist) {
+        List<Music> result = new ArrayList<>();
+        for (Music music : mMusicList
+        ) {
+            if (music.getArtist().equals(artist))
+                result.add(music);
+        }
+        return result;
     }
 }
 

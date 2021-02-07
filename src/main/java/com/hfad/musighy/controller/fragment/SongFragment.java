@@ -19,18 +19,25 @@ import java.util.List;
 
 
 public class SongFragment extends Fragment {
+    public static final String ARGS_ALBUM_NAME = "ALBUM_NAME";
+    public static final String ARGS_ARTIST_NAME = "ARTIST_NAME";
+    private String album;
+    private String artist;
     private MusicRepository mRepository;
     private RecyclerView mRecyclerView;
     private MusicAdapter mMusicAdapter;
+    private List<Music> musics;
 
 
     public SongFragment() {
         // Required empty public constructor
     }
 
-    public static SongFragment newInstance() {
+    public static SongFragment newInstance(String album, String artist) {
         SongFragment fragment = new SongFragment();
         Bundle args = new Bundle();
+        args.putString(ARGS_ALBUM_NAME, album);
+        args.putString(ARGS_ARTIST_NAME, artist);
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,7 +45,15 @@ public class SongFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRepository=MusicRepository.getInstance(getActivity());
+        mRepository = MusicRepository.getInstance(getActivity());
+        album = getArguments().getString(ARGS_ALBUM_NAME);
+        artist = getArguments().getString(ARGS_ARTIST_NAME);
+        if (album == null && artist == null)
+            musics = mRepository.getMusicList();
+        else if (album != null)
+            musics = mRepository.getMusicListByAlbum(album);
+        else if (artist != null)
+            musics = mRepository.getMusicListByArtists(artist);
     }
 
     @Override
@@ -54,7 +69,6 @@ public class SongFragment extends Fragment {
     private void updateUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List<Music> musics = mRepository.getMusicList();
         if (mMusicAdapter == null) {
             mMusicAdapter = new MusicAdapter(getActivity(), musics);
             mRecyclerView.setAdapter(mMusicAdapter);
