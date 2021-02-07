@@ -1,32 +1,31 @@
 package com.hfad.musighy.controller.fragment;
 
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hfad.musighy.R;
 import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PlayMusicFragment extends Fragment {
     public static final String ARGS_MUSIC_POSITION = "ARGS_MUSIC_POSITION";
-    public static final String TAG = "PMF";
+    public static final String TAG = "Play Music Fragment";
+    private MusicRepository mRepository;
     private TextView mTextViewName;
     private TextView mTextViewArtist;
     private TextView mTextViewDurationPlayed;
@@ -41,12 +40,7 @@ public class PlayMusicFragment extends Fragment {
     private SeekBar mSeekBar;
     private int mPosition = -1;
     private ArrayList<Music> mMusicList;
-    private Uri mUri;
-    private MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
-    private Thread playThread;
-    private Thread previousThread;
-    private Thread nextThread;
 
     public PlayMusicFragment() {
         // Required empty public constructor
@@ -64,90 +58,11 @@ public class PlayMusicFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMusicList = new MusicRepository(getActivity()).getMusicList();
+        mRepository = MusicRepository.getInstance(getActivity());
+        mMusicList = mRepository.getMusicList();
         mPosition = getArguments().getInt(ARGS_MUSIC_POSITION);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        playThread();
-//        nextThread();
-//        previousThread();
-    }
-
-    /*  private void previousThread() {
-          previousThread = new Thread() {
-              @Override
-              public void run() {
-                  super.run();
-                  mImageViewPrevious.setOnClickListener(new View.OnClickListener() {
-                      @Override
-                      public void onClick(View v) {
-                          if (mMediaPlayer.isPlaying()) {
-                              mButtonPlay.setImageResource(R.drawable.ic_play_arrow_white_18dp);
-                              mMediaPlayer.pause();
-                              manageSeekBar();
-                          } else {
-                              mButtonPlay.setImageResource(R.drawable.ic_pause_white_18dp);
-                              mMediaPlayer.start();
-                              manageSeekBar();
-                          }
-                      }
-                  });
-              }
-          };
-          previousThread.start();
-      }
-
-      private void nextThread() {
-          nextThread = new Thread() {
-              @Override
-              public void run() {
-                  super.run();
-                  mImageViewNext.setOnClickListener(new View.OnClickListener() {
-                      @Override
-                      public void onClick(View v) {
-                          if (mMediaPlayer.isPlaying()) {
-                              mButtonPlay.setImageResource(R.drawable.ic_play_arrow_white_18dp);
-                              mMediaPlayer.pause();
-                              manageSeekBar();
-                          } else {
-                              mButtonPlay.setImageResource(R.drawable.ic_pause_white_18dp);
-                              mMediaPlayer.start();
-                              manageSeekBar();
-                          }
-                      }
-                  });
-              }
-          };
-          nextThread.start();
-      }
-
-      private void playThread() {
-          playThread = new Thread() {
-              @Override
-              public void run() {
-                  super.run();
-                  mButtonPlay.setOnClickListener(new View.OnClickListener() {
-                      @Override
-                      public void onClick(View v) {
-                          if (mMediaPlayer.isPlaying()) {
-                              mButtonPlay.setImageResource(R.drawable.ic_play_arrow_white_18dp);
-                              mMediaPlayer.pause();
-                              manageSeekBar();
-                          } else {
-                              mButtonPlay.setImageResource(R.drawable.ic_pause_white_18dp);
-                              mMediaPlayer.start();
-                              manageSeekBar();
-                          }
-                      }
-                  });
-              }
-          };
-          playThread.start();
-      }
-  */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -155,7 +70,6 @@ public class PlayMusicFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_play_music, container, false);
         findAllViews(view);
         updateUI();
-        setOnClickListeners();
         return view;
     }
 
@@ -164,8 +78,8 @@ public class PlayMusicFragment extends Fragment {
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mMediaPlayer != null && fromUser) {
-                    mMediaPlayer.seekTo(progress * 1000);
+                if (mRepository.getMediaPlayer() != null && fromUser) {
+                    mRepository.getMediaPlayer().seekTo(progress * 1000);
                 }
             }
 
@@ -182,22 +96,20 @@ public class PlayMusicFragment extends Fragment {
         mButtonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMediaPlayer.isPlaying()) {
+                if (mRepository.getMediaPlayer().isPlaying()) {
                     mButtonPlay.setImageResource(R.drawable.ic_play_arrow_white_18dp);
-                    mMediaPlayer.pause();
-                    manageSeekBar();
+                    mRepository.getMediaPlayer().pause();
                 } else {
                     mButtonPlay.setImageResource(R.drawable.ic_pause_white_18dp);
-                    mMediaPlayer.start();
-                    manageSeekBar();
+                    mRepository.getMediaPlayer().start();
                 }
+                manageSeekBar();
             }
         });
         mImageViewNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPosition = (mPosition + 1) % mMusicList.size();
-                updateUI();
+                playNextMusic();
             }
         });
         mImageViewPrevious.setOnClickListener(new View.OnClickListener() {
@@ -205,40 +117,92 @@ public class PlayMusicFragment extends Fragment {
             public void onClick(View v) {
                 if (mPosition == 0)
                     return;
-                mPosition = (mPosition - 1) % mMusicList.size();
+                if (!mRepository.isRepeatOne())
+                    mPosition = (mPosition - 1) % mMusicList.size();
                 updateUI();
+            }
+        });
+        mRepository.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mButtonPlay.setImageResource(R.drawable.ic_play_arrow_white_18dp);
+                playNextMusic();
+            }
+        });
+        mImageViewShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRepository.isShuffle()) {
+                    mImageViewShuffle.setImageResource(R.drawable.ic_shuffle_off_white_18dp);
+                } else {
+                    mImageViewShuffle.setImageResource(R.drawable.ic_shuffle_on_white_18dp);
+                }
+                mRepository.setShuffle(!mRepository.isShuffle());
+            }
+        });
+        mImageViewRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRepository.isRepeatAll()) {
+                    mRepository.setRepeatAll(false);
+                    mRepository.setRepeatOne(true);
+                    mImageViewRepeat.setImageResource(R.drawable.ic_repeat_one_on_white_18dp);
+                } else if (mRepository.isRepeatOne()) {
+                    mRepository.setRepeatAll(false);
+                    mRepository.setRepeatOne(false);
+                    mImageViewRepeat.setImageResource(R.drawable.ic_repeat_white_off_18dp);
+                } else {
+                    mRepository.setRepeatAll(true);
+                    mRepository.setRepeatOne(false);
+                    mImageViewRepeat.setImageResource(R.drawable.ic_repeat_white_on_18dp);
+                }
+            }
+        });
+        mImageButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
             }
         });
     }
 
+    private void playNextMusic() {
+        if (!mRepository.isRepeatOne() && !mRepository.isShuffle()) {
+            if ((mPosition + 1) % mMusicList.size() == 0 && !mRepository.isRepeatAll())
+                return;
+            mPosition = (mPosition + 1) % mMusicList.size();
+        } else if (mRepository.isShuffle() && !mRepository.isRepeatOne()) {
+            mPosition = new Random().nextInt(mMusicList.size() - 1);
+            Log.d(TAG, "playNextMusic: " + mPosition);
+        }
+        updateUI();
+    }
+
     private void updateUI() {
-        if (mMusicList != null) {
-            mButtonPlay.setImageResource(R.drawable.ic_pause_white_18dp);
-            mUri = Uri.parse(mMusicList.get(mPosition).getPath());
-        }
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            Log.d(TAG, "media player not null");
-        }
-        mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), mUri);
-        mMediaPlayer.start();
-        Log.d(TAG, "media player is null");
+        mButtonPlay.setImageResource(R.drawable.ic_pause_white_18dp);
+        mRepository.startMediaPlayer(mMusicList.get(mPosition).getMusicUri());
         mTextViewName.setText(mMusicList.get(mPosition).getTitle());
         mTextViewArtist.setText(mMusicList.get(mPosition).getArtist());
-        mImageViewCover.setImageDrawable(new MusicRepository(getActivity()).getAlbumArt(mMusicList.get(mPosition)));
+        if (mRepository.isShuffle())
+            mImageViewShuffle.setImageResource(R.drawable.ic_shuffle_on_white_18dp);
+        if (mRepository.isRepeatAll())
+            mImageViewRepeat.setImageResource(R.drawable.ic_repeat_white_on_18dp);
+        if (mRepository.isRepeatOne())
+            mImageViewRepeat.setImageResource(R.drawable.ic_repeat_one_on_white_18dp);
+        Glide.with(getActivity()).load(mMusicList.get(mPosition).getAlbumArtUri()).placeholder(R.drawable.ic_no_album_art).into(mImageViewCover);
         manageSeekBar();
+        setOnClickListeners();
     }
 
 
     private void manageSeekBar() {
-        mSeekBar.setMax(mMediaPlayer.getDuration() / 1000);
-        mTextViewDurationTotal.setText(getTime(mMediaPlayer.getDuration() / 1000));
+        mSeekBar.setMax(mRepository.getMediaPlayer().getDuration() / 1000);
+        mTextViewDurationTotal.setText(getTime(mRepository.getMediaPlayer().getDuration() / 1000));
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mMediaPlayer != null) {
-                    int mCurrentPosition = mMediaPlayer.getCurrentPosition() / 1000;
+                if (mRepository.getMediaPlayer() != null) {
+                    int mCurrentPosition = mRepository.getMediaPlayer().getCurrentPosition() / 1000;
                     mSeekBar.setProgress(mCurrentPosition);
                     mTextViewDurationPlayed.setText(getTime(mCurrentPosition));
                 }
@@ -248,7 +212,7 @@ public class PlayMusicFragment extends Fragment {
     }
 
     private String getTime(int mCurrentPosition) {
-        String result = "";
+        String result;
         String seconds = String.valueOf(mCurrentPosition % 60);
         String minutes = String.valueOf(mCurrentPosition / 60);
         if (seconds.length() == 1)

@@ -57,14 +57,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_view_top_player" />
 
-    <ImageView
+<!--    <ImageView
         android:id="@+id/image_view_back_player"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:src="@drawable/gradient_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view_top_player" />
+        app:layout_constraintTop_toBottomOf="@+id/card_view_top_player" />-->
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_music_name"

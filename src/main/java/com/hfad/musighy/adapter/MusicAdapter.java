@@ -2,27 +2,20 @@ package com.hfad.musighy.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hfad.musighy.R;
 import com.hfad.musighy.controller.activity.PlayMusicActivity;
 import com.hfad.musighy.model.Music;
-import com.hfad.musighy.model.MusicRepository;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder> {
@@ -44,7 +37,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
     @Override
     public void onBindViewHolder(@NonNull MusicHolder holder, int position) {
         Music music = mMusicList.get(position);
-        holder.bindMusic(music);
+        holder.bindMusic(holder, music);
     }
 
     @Override
@@ -71,12 +64,10 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
         }
 
 
-        public void bindMusic(Music music) {
+        public void bindMusic(MusicHolder holder, Music music) {
             mTextViewMusicFileName.setText(music.getTitle());
-            mImageViewAlbumArt.setImageDrawable(new MusicRepository(mContext).getAlbumArt(music));
+            Glide.with(mContext).load(music.getAlbumArtUri()).placeholder(R.drawable.ic_no_album_art).into(mImageViewAlbumArt);
 
         }
     }
-
-
 }

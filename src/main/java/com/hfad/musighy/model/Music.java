@@ -1,22 +1,28 @@
 package com.hfad.musighy.model;
 
+import android.net.Uri;
+
 public class Music {
     private String path;
     private String title;
     private String artist;
     private String album;
     private String duration;
+    private Uri albumArtUri;
+    private Uri musicUri;
 
 
     public Music() {
     }
 
-    public Music(String path, String title, String artist, String album, String duration) {
+    public Music(String path, String title, String artist, String album, String duration,Uri albumArtUri,Uri musicUri) {
         this.path = path;
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
+        this.albumArtUri = albumArtUri;
+        this.musicUri=musicUri;
     }
 
     public String getPath() {
@@ -57,5 +63,21 @@ public class Music {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public Uri getAlbumArtUri() {
+        return albumArtUri;
+    }
+
+    public void setAlbumArtUri(Uri albumArtUri) {
+        this.albumArtUri = albumArtUri;
+    }
+
+    public Uri getMusicUri() {
+        return musicUri;
+    }
+
+    public void setMusicUri(Uri musicUri) {
+        this.musicUri = musicUri;
     }
 }

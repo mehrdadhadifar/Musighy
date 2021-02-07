@@ -19,8 +19,10 @@ import java.util.List;
 
 
 public class SongFragment extends Fragment {
+    private MusicRepository mRepository;
     private RecyclerView mRecyclerView;
     private MusicAdapter mMusicAdapter;
+
 
     public SongFragment() {
         // Required empty public constructor
@@ -36,6 +38,7 @@ public class SongFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRepository=MusicRepository.getInstance(getActivity());
     }
 
     @Override
@@ -50,7 +53,8 @@ public class SongFragment extends Fragment {
 
     private void updateUI() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<Music> musics = new MusicRepository(getActivity()).getMusicList();
+
+        List<Music> musics = mRepository.getMusicList();
         if (mMusicAdapter == null) {
             mMusicAdapter = new MusicAdapter(getActivity(), musics);
             mRecyclerView.setAdapter(mMusicAdapter);

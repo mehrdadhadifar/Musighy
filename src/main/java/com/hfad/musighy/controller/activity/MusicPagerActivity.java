@@ -30,10 +30,10 @@ import java.util.List;
 
 public class MusicPagerActivity extends AppCompatActivity {
     public static final int PERMISSION_REQUEST_CODE = 1;
+    private MusicRepository mRepository;
     private TabLayout mMusicTabLayout;
     private ViewPager2 mMusicViewPager;
     private MusicViewPagerAdapter mAdapter;
-    private ArrayList<Music> mMusicArrayList;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MusicPagerActivity.class);
@@ -44,6 +44,7 @@ public class MusicPagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_pager);
+        mRepository=MusicRepository.getInstance(this);
         findAllViews();
         handelPermission();
     }
@@ -55,12 +56,12 @@ public class MusicPagerActivity extends AppCompatActivity {
                     , PERMISSION_REQUEST_CODE);
         } else {
             Toast.makeText(this, "WELCOME", Toast.LENGTH_LONG).show();
-            mMusicArrayList = new MusicRepository(this).getMusicList();
             updateUI();
         }
     }
 
     private void updateUI() {
+        mRepository.getMusicList();
         mAdapter = new MusicViewPagerAdapter(this);
         mAdapter.addFragments(SongFragment.newInstance());
         mAdapter.addFragments(AlbumFragment.newInstance());
@@ -114,7 +115,6 @@ public class MusicPagerActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mMusicArrayList = new MusicRepository(this).getMusicList();
                 updateUI();
             } else {
                 finish();
