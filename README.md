@@ -4,7 +4,7 @@ Local music player for Android.
 
 \
 \
-MVC architecture\
+MVC architecture.\
 Material design.\
 ViewPager2.\
 Glide.
@@ -14,4 +14,3 @@ List of all songs.\
 Filter by album or artist.\
 Shuffle.\
 Repeat songs list or just a single track.\
-Search in tasks title or comments.
