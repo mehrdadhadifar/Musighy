@@ -1,7 +1,6 @@
 package com.hfad.musighy.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.hfad.musighy.R;
-import com.hfad.musighy.controller.activity.PlayMusicActivity;
 import com.hfad.musighy.model.Music;
 
 import java.util.List;
@@ -21,10 +19,12 @@ import java.util.List;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder> {
     private Context mContext;
     private List<Music> mMusicList;
+    private MusicClicked mMusicClicked;
 
-    public MusicAdapter(Context context, List<Music> musicList) {
+    public MusicAdapter(Context context, List<Music> musicList, MusicClicked musicClicked) {
         mContext = context;
         mMusicList = musicList;
+        mMusicClicked = musicClicked;
     }
 
     @NonNull
@@ -57,8 +57,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PlayMusicActivity.newIntent(mContext, getAdapterPosition());
-                    mContext.startActivity(intent);
+                    mMusicClicked.musicClicked(getAdapterPosition());
                 }
             });
         }
@@ -69,5 +68,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
             Glide.with(mContext).load(music.getAlbumArtUri()).placeholder(R.drawable.ic_no_album_art).into(mImageViewAlbumArt);
 
         }
+    }
+
+    public interface MusicClicked {
+        public void musicClicked(int musicPosition);
     }
 }

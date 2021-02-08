@@ -19,13 +19,13 @@ import com.hfad.musighy.R;
 import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class PlayMusicFragment extends Fragment {
     public static final String ARGS_MUSIC_POSITION = "ARGS_MUSIC_POSITION";
-    private static final String ARGS_MUSIC_LIST = "ARGS_MUSIC_LIST";
+    public static final String ARGS_ALBUM_NAME = "ALBUM_NAME";
+    public static final String ARGS_ARTIST_NAME = "ARTIST_NAME";
     public static final String TAG = "Play Music Fragment";
     private MusicRepository mRepository;
     private TextView mTextViewName;
@@ -41,7 +41,9 @@ public class PlayMusicFragment extends Fragment {
     private FloatingActionButton mButtonPlay;
     private SeekBar mSeekBar;
     private int mPosition = -1;
-    private ArrayList<Music> mMusicList;
+    private String albumName;
+    private String artistName;
+    private List<Music> mMusicList;
     private Handler mHandler = new Handler();
 
     public PlayMusicFragment() {
@@ -49,10 +51,12 @@ public class PlayMusicFragment extends Fragment {
     }
 
 
-    public static PlayMusicFragment newInstance(int position) {
+    public static PlayMusicFragment newInstance(int position, String album, String artist) {
         PlayMusicFragment fragment = new PlayMusicFragment();
         Bundle args = new Bundle();
         args.putInt(ARGS_MUSIC_POSITION, position);
+        args.putString(ARGS_ALBUM_NAME, album);
+        args.putString(ARGS_ARTIST_NAME, artist);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,8 +65,15 @@ public class PlayMusicFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRepository = MusicRepository.getInstance(getActivity());
-        mMusicList = mRepository.getMusicList();
         mPosition = getArguments().getInt(ARGS_MUSIC_POSITION);
+        albumName = getArguments().getString(ARGS_ALBUM_NAME);
+        artistName = getArguments().getString(ARGS_ARTIST_NAME);
+        if (albumName == null && artistName == null)
+            mMusicList = mRepository.getMusicList();
+        else if (albumName != null)
+            mMusicList = mRepository.getMusicListByAlbum(albumName);
+        else if (artistName != null)
+            mMusicList = mRepository.getMusicListByArtists(artistName);
     }
 
     @Override

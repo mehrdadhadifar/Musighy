@@ -1,5 +1,6 @@
 package com.hfad.musighy.controller.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,13 +13,14 @@ import android.view.ViewGroup;
 
 import com.hfad.musighy.R;
 import com.hfad.musighy.adapter.MusicAdapter;
+import com.hfad.musighy.controller.activity.PlayMusicActivity;
 import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;
 
 import java.util.List;
 
 
-public class SongFragment extends Fragment {
+public class SongFragment extends Fragment implements MusicAdapter.MusicClicked {
     public static final String ARGS_ALBUM_NAME = "ALBUM_NAME";
     public static final String ARGS_ARTIST_NAME = "ARTIST_NAME";
     private String album;
@@ -70,7 +72,7 @@ public class SongFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (mMusicAdapter == null) {
-            mMusicAdapter = new MusicAdapter(getActivity(), musics);
+            mMusicAdapter = new MusicAdapter(getActivity(), musics, this);
             mRecyclerView.setAdapter(mMusicAdapter);
         } else {
             mMusicAdapter.notifyDataSetChanged();
@@ -79,5 +81,11 @@ public class SongFragment extends Fragment {
 
     private void findAllViews(View view) {
         mRecyclerView = view.findViewById(R.id.music_recycler_view);
+    }
+
+    @Override
+    public void musicClicked(int musicPosition) {
+        Intent intent = PlayMusicActivity.newIntent(getActivity(), musicPosition, album, artist);
+        getActivity().startActivity(intent);
     }
 }
