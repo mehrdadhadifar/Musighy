@@ -3,16 +3,11 @@ package com.hfad.musighy.model;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.hfad.musighy.R;
-
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,21 +86,14 @@ public class MusicRepository {
         return mMediaPlayer;
     }
 
-    public void stopAndReleaseMediaPlayer() {
-        mMediaPlayer.stop();
-        mMediaPlayer.release();
-    }
 
     public void startMediaPlayer(Uri musicUri) {
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
-            mMediaPlayer = MediaPlayer.create(mContext, musicUri);
-            mMediaPlayer.start();
-        } else {
-            mMediaPlayer = MediaPlayer.create(mContext, musicUri);
-            mMediaPlayer.start();
         }
+        mMediaPlayer = MediaPlayer.create(mContext, musicUri);
+        mMediaPlayer.start();
     }
 
     public boolean isShuffle() {

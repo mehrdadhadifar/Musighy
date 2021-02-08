@@ -1,17 +1,15 @@
 package com.hfad.musighy.controller.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.hfad.musighy.R;
-import com.hfad.musighy.adapter.AlbumAdapter;
 import com.hfad.musighy.adapter.ArtistAdapter;
 import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;

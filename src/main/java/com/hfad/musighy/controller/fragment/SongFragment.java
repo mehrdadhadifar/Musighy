@@ -47,6 +47,10 @@ public class SongFragment extends Fragment implements MusicAdapter.MusicClicked 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initData();
+    }
+
+    private void initData() {
         mRepository = MusicRepository.getInstance(getActivity());
         album = getArguments().getString(ARGS_ALBUM_NAME);
         artist = getArguments().getString(ARGS_ARTIST_NAME);

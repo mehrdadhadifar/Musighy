@@ -51,6 +51,10 @@ public class AlbumDetailsFragment extends Fragment implements MusicAdapter.Music
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRepository = MusicRepository.getInstance(getActivity());
+        initData();
+    }
+
+    private void initData() {
         album = getArguments().getString(ARGS_ALBUM_NAME);
         artist = getArguments().getString(ARGS_ARTIST_NAME);
         if (album != null)

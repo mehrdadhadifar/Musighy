@@ -64,6 +64,10 @@ public class PlayMusicFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initData();
+    }
+
+    private void initData() {
         mRepository = MusicRepository.getInstance(getActivity());
         mPosition = getArguments().getInt(ARGS_MUSIC_POSITION);
         albumName = getArguments().getString(ARGS_ALBUM_NAME);

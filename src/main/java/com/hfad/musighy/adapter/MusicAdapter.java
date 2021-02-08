@@ -71,6 +71,6 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder>
     }
 
     public interface MusicClicked {
-        public void musicClicked(int musicPosition);
+        void musicClicked(int musicPosition);
     }
 }

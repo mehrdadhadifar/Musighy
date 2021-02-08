@@ -1,5 +1,12 @@
 package com.hfad.musighy.controller.activity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,20 +16,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.widget.Toast;
-
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.hfad.musighy.R;
 import com.hfad.musighy.controller.fragment.AlbumFragment;
 import com.hfad.musighy.controller.fragment.ArtistFragment;
-import com.hfad.musighy.R;
 import com.hfad.musighy.controller.fragment.SongFragment;
-import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;
 
 import java.util.ArrayList;
