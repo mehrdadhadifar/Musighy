@@ -1,6 +1,6 @@
 Local music player for Android.
 
-![alt text](https://github.com/mehrdadhadifar/Musighy/blob/master/musicPlayer1.jpg?raw=true) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![alt text](https://github.com/mehrdadhadifar/Musighy/blob/master/musicPlayer2.jpg?raw=true) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![alt text](https://github.com/mehrdadhadifar/Musighy/blob/master/musicPlayer3.jpg?raw=true)
+![alt text](https://github.com/mehrdadhadifar/Musighy/blob/master/musicPlayer1.jpg?raw=true) &nbsp;&nbsp;&nbsp; ![alt text](https://github.com/mehrdadhadifar/Musighy/blob/master/musicPlayer2.jpg?raw=true) &nbsp;&nbsp;&nbsp; ![alt text](https://github.com/mehrdadhadifar/Musighy/blob/master/musicPlayer3.jpg?raw=true)
 
 \
 \
