@@ -164,5 +164,18 @@ public class MusicRepository {
         }
         return result;
     }
+
+    public List<Music> getArtistList() {
+        List<Music> result = new ArrayList<>();
+        List<String> artistNames = new ArrayList<>();
+        for (Music music : mMusicList
+        ) {
+            if (!artistNames.contains(music.getArtist())) {
+                result.add(music);
+                artistNames.add(music.getArtist());
+            }
+        }
+        return result;
+    }
 }
 

@@ -13,15 +13,18 @@ import com.hfad.musighy.controller.fragment.AlbumDetailsFragment;
 public class AlbumDetailsActivity extends SingleFragmentActivity {
 
     public static final String EXTRA_ALBUM_NAME = "ALBUM_NAME";
+    public static final String EXTRA_ARTIST_NAME = "ARTIST_NAME";
 
-    public static Intent newIntent(Context context, String albumName) {
+    public static Intent newIntent(Context context, String albumName, String artistName) {
         Intent intent = new Intent(context, AlbumDetailsActivity.class);
         intent.putExtra(EXTRA_ALBUM_NAME, albumName);
+        intent.putExtra(EXTRA_ARTIST_NAME, artistName);
         return intent;
     }
 
     @Override
     public Fragment createFragment() {
-        return AlbumDetailsFragment.newInstance(getIntent().getStringExtra(EXTRA_ALBUM_NAME));
+        return AlbumDetailsFragment.newInstance(getIntent().getStringExtra(EXTRA_ALBUM_NAME)
+                , getIntent().getStringExtra(EXTRA_ARTIST_NAME));
     }
 }

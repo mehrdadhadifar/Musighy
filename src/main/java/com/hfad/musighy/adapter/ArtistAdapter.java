@@ -18,11 +18,11 @@ import com.hfad.musighy.model.Music;
 
 import java.util.List;
 
-public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumHolder> {
+public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.AlbumHolder> {
     private Context mContext;
     private List<Music> mAlbumList;
 
-    public AlbumAdapter(Context context, List<Music> albumList) {
+    public ArtistAdapter(Context context, List<Music> albumList) {
         mContext = context;
         mAlbumList = albumList;
     }
@@ -57,7 +57,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumHolder>
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = AlbumDetailsActivity.newIntent(mContext, mAlbumList.get(getAdapterPosition()).getAlbum(), null);
+                    Intent intent = AlbumDetailsActivity.newIntent(mContext, null, mAlbumList.get(getAdapterPosition()).getArtist());
                     mContext.startActivity(intent);
                 }
             });
@@ -65,7 +65,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumHolder>
         }
 
         private void bindAlbum(Music music) {
-            mTextViewAlbumFileName.setText(music.getAlbum());
+            mTextViewAlbumFileName.setText(music.getArtist());
             Glide.with(mContext).load(music.getAlbumArtUri()).placeholder(R.drawable.ic_no_album_art).into(mImageViewAlbumArt);
         }
     }

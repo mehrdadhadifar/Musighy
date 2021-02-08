@@ -16,26 +16,33 @@ import com.bumptech.glide.Glide;
 import com.hfad.musighy.R;
 import com.hfad.musighy.adapter.MusicAdapter;
 import com.hfad.musighy.controller.activity.PlayMusicActivity;
+import com.hfad.musighy.model.Music;
 import com.hfad.musighy.model.MusicRepository;
+
+import java.util.List;
 
 public class AlbumDetailsFragment extends Fragment implements MusicAdapter.MusicClicked {
     public static final String ARGS_ALBUM_NAME = "ALBUM_NAME";
+    public static final String ARGS_ARTIST_NAME = "ARTIST_NAME";
     private MusicRepository mRepository;
     private String album;
+    private String artist;
     private ImageView mAlbumArtImageView;
     private ImageView mBackImageView;
     private RecyclerView mRecyclerView;
     private MusicAdapter mMusicAdapter;
+    private List<Music> mMusicList;
 
 
     public AlbumDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static AlbumDetailsFragment newInstance(String albumName) {
+    public static AlbumDetailsFragment newInstance(String albumName, String artistName) {
         AlbumDetailsFragment fragment = new AlbumDetailsFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_ALBUM_NAME, albumName);
+        args.putString(ARGS_ARTIST_NAME, artistName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +52,11 @@ public class AlbumDetailsFragment extends Fragment implements MusicAdapter.Music
         super.onCreate(savedInstanceState);
         mRepository = MusicRepository.getInstance(getActivity());
         album = getArguments().getString(ARGS_ALBUM_NAME);
+        artist = getArguments().getString(ARGS_ARTIST_NAME);
+        if (album != null)
+            mMusicList = mRepository.getMusicListByAlbum(album);
+        else if (artist != null)
+            mMusicList = mRepository.getMusicListByArtists(artist);
     }
 
     @Override
@@ -68,9 +80,13 @@ public class AlbumDetailsFragment extends Fragment implements MusicAdapter.Music
     }
 
     private void initUI() {
-        Glide.with(getActivity()).load(mRepository.getMusicListByAlbum(album).get(0).getAlbumArtUri())
-                .placeholder(R.drawable.ic_no_album_art).into(mAlbumArtImageView);
-        mMusicAdapter = new MusicAdapter(getActivity(), mRepository.getMusicListByAlbum(album), this);
+        if (album != null)
+            Glide.with(getActivity()).load(mRepository.getMusicListByAlbum(album).get(0).getAlbumArtUri())
+                    .placeholder(R.drawable.ic_no_album_art).into(mAlbumArtImageView);
+        else
+            Glide.with(getActivity()).load(mRepository.getMusicListByArtists(artist).get(0).getAlbumArtUri())
+                    .placeholder(R.drawable.ic_no_album_art).into(mAlbumArtImageView);
+        mMusicAdapter = new MusicAdapter(getActivity(), mMusicList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mMusicAdapter);
     }
@@ -83,7 +99,7 @@ public class AlbumDetailsFragment extends Fragment implements MusicAdapter.Music
 
     @Override
     public void musicClicked(int musicPosition) {
-        Intent intent = PlayMusicActivity.newIntent(getActivity(), musicPosition, album, null);
+        Intent intent = PlayMusicActivity.newIntent(getActivity(), musicPosition, album, artist);
         getActivity().startActivity(intent);
     }
 }
