@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.activity.SingleFragmentActivity"></activity>
+        <activity android:name=".controller.activity.AlbumDetailsActivity"></activity>
+        <activity android:name=".controller.activity.SingleFragmentActivity" />
         <activity android:name=".controller.activity.PlayMusicActivity" />
         <activity android:name=".controller.activity.MusicPagerActivity">
             <intent-filter>

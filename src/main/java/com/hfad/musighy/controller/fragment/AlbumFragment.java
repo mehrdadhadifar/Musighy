@@ -57,7 +57,7 @@ public class AlbumFragment extends Fragment {
     private void updateUI() {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        List<Music> musics = mRepository.getMusicList();
+        List<Music> musics = mRepository.getAlbumList();
         if (mAlbumAdapter == null) {
             mAlbumAdapter = new AlbumAdapter(getActivity(), musics);
             mRecyclerView.setAdapter(mAlbumAdapter);

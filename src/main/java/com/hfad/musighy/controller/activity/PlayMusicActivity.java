@@ -11,7 +11,7 @@ import com.hfad.musighy.controller.fragment.PlayMusicFragment;
 
 public class PlayMusicActivity extends SingleFragmentActivity {
 
-    private static final String EXTRA_MUSIC_POSITION = "EXTRA_MUSIC_POSITION";
+    private static final String EXTRA_MUSIC_POSITION = "MUSIC_POSITION";
 
     public static Intent newIntent(Context context, int position) {
         Intent intent = new Intent(context, PlayMusicActivity.class);

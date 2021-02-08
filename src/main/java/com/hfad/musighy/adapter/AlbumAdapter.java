@@ -1,6 +1,7 @@
 package com.hfad.musighy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.hfad.musighy.R;
+import com.hfad.musighy.controller.activity.AlbumDetailsActivity;
 import com.hfad.musighy.model.Music;
 
 import java.util.List;
@@ -52,7 +54,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumHolder>
             super(itemView);
             mTextViewAlbumFileName = itemView.findViewById(R.id.album_name_text_view);
             mImageViewAlbumArt = itemView.findViewById(R.id.album_art_image_view);
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = AlbumDetailsActivity.newIntent(mContext, mAlbumList.get(getAdapterPosition()).getAlbum());
+                    mContext.startActivity(intent);
+                }
+            });
 
         }
 

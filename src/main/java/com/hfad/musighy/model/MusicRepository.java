@@ -151,5 +151,18 @@ public class MusicRepository {
         }
         return result;
     }
+
+    public List<Music> getAlbumList() {
+        List<Music> result = new ArrayList<>();
+        List<String> albumNames = new ArrayList<>();
+        for (Music music : mMusicList
+        ) {
+            if (!albumNames.contains(music.getAlbum())) {
+                result.add(music);
+                albumNames.add(music.getAlbum());
+            }
+        }
+        return result;
+    }
 }
 
